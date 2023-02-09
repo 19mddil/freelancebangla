@@ -1,3 +1,5 @@
+const homeRouter = require('../routers/homeRouter');
+
 module.exports = (app) => {
-    app.get('/', (req, res) => res.send("hello"));
+    app.use(homeRouter);
 }
