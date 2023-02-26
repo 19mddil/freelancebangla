@@ -23,7 +23,7 @@ class Navigation extends Component {
                 <Collapse isOpen={this.state.isNavOpen} navbar>
                     <Nav className='mr-auto' navbar>
                         <NavItem>
-                            <Link to='/' className='nav-link active'> Home</Link>
+                            <Link to='/' className='nav-link'> Home</Link>
                         </NavItem>
                         {
                             !isAuthenticated()
@@ -45,7 +45,7 @@ class Navigation extends Component {
                                     <Link to='/logout' className='nav-link' onClick={() => { signout() }} >Logout</Link>
                                 </NavItem>
                                 <NavItem>
-                                    <Link to='#' className='nav-link'>{userInfo().role} Dashboard</Link>
+                                    <Link to='/user/dashboard' className='nav-link'>{userInfo().role} Dashboard</Link>
                                 </NavItem>
                             </>)
                         }

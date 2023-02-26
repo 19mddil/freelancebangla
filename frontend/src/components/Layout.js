@@ -2,7 +2,6 @@
 import React from 'react';
 import { useEffect } from "react";
 import Navigation from './header/Navigation';
-
 const Layout = ({ title = 'Title', className, children }) => {
     useEffect(() => {
         document.title = title;
