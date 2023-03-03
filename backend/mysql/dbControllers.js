@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports.genJWT = function ({ id, email, password, role, submission_time }) {
     return new Promise((resolve, reject) => {
+        console.log(process.env.JWT_SECRET_KEY);
         const token = jwt.sign({
             id: id,
             email: email,
@@ -88,5 +89,19 @@ module.exports.dbFindUserByEmailByRole = (connecion, email, role) => {
     })
 }
 
-module.exports.findusers = null;
+module.exports.dbCreateJobAdvertise = (connecion, { title, applicationEndingTime, startingDate, tags, client_id }) => {
+    //console.log(title, applicationEndingTime, startingDate, tags, client_id);
+    return new Promise((resolve, reject) => {
+        const createJobAdvertiseSql = `INSERT INTO freela13_freelancebangla.advertised_jobs (client_id, title, required_skills, starting_date, application_ending_date) VALUES ('${client_id}', '${title}', '${tags}', '${startingDate}', '${applicationEndingTime}')`;
+        connecion.query(createJobAdvertiseSql, function (error, result, fields) {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        })
+    })
+
+};
+
 

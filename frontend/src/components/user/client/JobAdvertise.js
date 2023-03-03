@@ -4,6 +4,7 @@ import TagsInput from "./TagsInput";
 import Layout from "../../Layout";
 import { showError, showSuccess, showLoading } from '../../../utils/messages';
 import { userInfo } from '../../../utils/auth';
+import { createJobAdvertise } from "../../../api/apiClient";
 
 class JobAdvertise extends Component {
     state = {
@@ -52,10 +53,40 @@ class JobAdvertise extends Component {
 
         });
         this.state.formData.set('tags', [...this.state.tags]);
-        console.log(this.state.tags)
         const { token } = userInfo();
+
         console.log(this.state.formData);
         console.log(token);
+
+        createJobAdvertise(token, this.state.formData)
+            .then(res => {
+                this.setState({
+                    title: '',
+                    tags: [],
+                    startingDate: '',
+                    applicationEndingTime: '',
+                    formData: null,
+                    loading: false,
+                    disabled: false,
+                    success: true,
+                    error: false
+                })
+            })
+            .catch(err => {
+                let errMsg = "Something went wrong";
+                if (err.response) errMsg = err.response.data;
+                this.setState({
+                    title: '',
+                    tags: [],
+                    startingDate: '',
+                    applicationEndingTime: '',
+                    formData: null,
+                    loading: false,
+                    disabled: false,
+                    success: false,
+                    error: errMsg
+                })
+            });
 
     }
 
@@ -125,7 +156,7 @@ class JobAdvertise extends Component {
 
                     {showError(this.state.error, this.state.error)}
                     {showLoading(this.state.loading)}
-                    {showSuccess(this.state.success, 'Product Added Successfully!')}
+                    {showSuccess(this.state.success, 'Jobs beed Advertised Successfully!')}
                     {this.productForm()}
                 </div>
             </Layout>
