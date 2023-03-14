@@ -10,13 +10,17 @@ const Layout = ({ title = 'Title', className, children }) => {
         <div>
             <div className="mb-3">
                 <Navigation />
-            </div>
+                <div style={{ backgroundColor: 'lightgreen', paddingTop: '.2%', paddingBottom: '.05%' }}>
+                    <h4 style={{ textAlign: 'center' }}>FREELANCEBANGLA</h4>
+                    <p style={{ textAlign: 'center' }}>Your countries webpage to earn money by your skills.</p>
+                </div>
+            </div >
             <div className={className}>
                 <div>
                     {children}
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

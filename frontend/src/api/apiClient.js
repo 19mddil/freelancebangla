@@ -8,3 +8,10 @@ export const createJobAdvertise = (token, data) => {
         }
     })
 }
+export const loadAllJobAdvertise = (token) => {
+    return axios.get(`${API}/user/client/job/view/all/advertised`, {
+        headers: {
+            'Authorization': `${token}` //it will go to authorize middle ware check and destructed to user from token which will later be used to check whether the user is admin or not.
+        }
+    })
+}

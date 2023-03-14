@@ -104,4 +104,17 @@ module.exports.dbCreateJobAdvertise = (connecion, { title, applicationEndingTime
 
 };
 
+module.exports.dbFindAllAdvertiseJobs = (connecion) => {
+    return new Promise((resolve, reject) => {
+        const findAllJobAdvertiseSql = `SELECT * FROM freela13_freelancebangla.advertised_jobs`;
+        connecion.query(findAllJobAdvertiseSql, function (error, result, fields) {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result)
+            }
+        })
+    })
+}
+
 

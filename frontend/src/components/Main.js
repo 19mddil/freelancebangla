@@ -8,6 +8,7 @@ import WorkerDeals from './user/worker/Deals';
 import ClientDeals from './user/client/Deals';
 import Dashboard from './user/Dashboard';
 import JobAdvertise from './user/client/JobAdvertise';
+import LoadAdvertisedJobs from './user/client/LoadAdvertisedJobs';
 
 class Main extends Component {
     state = {
@@ -67,6 +68,18 @@ class Main extends Component {
                     element={
                         this.state.auth || isAuthenticated() ? (
                             <JobAdvertise />
+                        ) : (
+                            <Navigate
+                                to="/login"
+                            />
+                        )
+                    }
+                />
+                <Route
+                    path='/client/jobs/advertised'
+                    element={
+                        this.state.auth || isAuthenticated() ? (
+                            <LoadAdvertisedJobs />
                         ) : (
                             <Navigate
                                 to="/login"

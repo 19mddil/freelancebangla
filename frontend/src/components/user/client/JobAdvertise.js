@@ -65,7 +65,7 @@ class JobAdvertise extends Component {
                     tags: [],
                     startingDate: '',
                     applicationEndingTime: '',
-                    formData: null,
+                    formData: new FormData(),
                     loading: false,
                     disabled: false,
                     success: true,
@@ -111,13 +111,19 @@ class JobAdvertise extends Component {
                     type="text"
                     className="form-control"
                     value={this.state.title}
+                    disabled={this.state.disabled}
                     required
                 />
             </div>
             <br />
             <div className="form-group">
                 <h4 >Enter job skill-requirement tags:</h4>
-                <TagsInput tags={this.state.tags} handleKeyDown={this.handleKeyDown} removeTag={this.removeTag} />
+                <TagsInput
+                    tags={this.state.tags}
+                    handleKeyDown={this.handleKeyDown}
+                    removeTag={this.removeTag}
+                    disabled={this.state.disabled}
+                />
             </div>
             <br />
 
@@ -129,6 +135,7 @@ class JobAdvertise extends Component {
                     type="Date"
                     className="form-control"
                     value={this.state.applicationEndingTime}
+                    disabled={this.state.disabled}
                     required
                 />
             </div>
@@ -141,6 +148,7 @@ class JobAdvertise extends Component {
                     type="Date"
                     className="form-control"
                     value={this.state.startingDate}
+                    disabled={this.state.disabled}
                     required
                 />
             </div>

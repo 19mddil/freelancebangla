@@ -36,7 +36,7 @@ const Dashboard = () => {
                                     <Link className="nav-link" to="/client/deals">Ongoing Created Jobs</Link>
                                 </li>
                                 <li className="list-group-item">
-                                    <Link className="nav-link" to="/client/jobs">View my Advertised Jobs</Link>
+                                    <Link className="nav-link" to="/client/jobs/advertised">View my Advertised Jobs</Link>
                                 </li>
                                 <li className="list-group-item">
                                     <Link className="nav-link" to="/client/advertise/job/new">Advertise a new Job</Link>

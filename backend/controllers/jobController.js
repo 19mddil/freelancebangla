@@ -1,4 +1,4 @@
-const { dbConnect, dbCreateUser, dbCreateJobAdvertise } = require('../mysql/dbControllers');
+const { dbConnect, dbCreateUser, dbCreateJobAdvertise, dbFindAllAdvertiseJobs } = require('../mysql/dbControllers');
 
 const formidable = require('formidable');
 
@@ -23,10 +23,25 @@ module.exports.CreateJobAdvertise = async (req, res) => {
     })
 };
 
-module.exports.DeleteJobAdvertise = () => {
+module.exports.DeleteJobAdvertise = async (req, res) => {
 
 };
 
 module.exports.UpdateJobAdvertise = () => {
 
+}
+
+module.exports.FindAllJobAdvertise = async (req, res) => {
+    let connection = null;
+    try {
+        connection = await dbConnect('localhost');
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+    try {
+        const result = await dbFindAllAdvertiseJobs(connection);
+        return res.status(200).send(result);
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
 }
