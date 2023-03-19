@@ -117,4 +117,17 @@ module.exports.dbFindAllAdvertiseJobs = (connecion) => {
     })
 }
 
+module.exports.dbGetJobAdvertiseDetail = (connection, id) => {
+    return new Promise((resolve, reject) => {
+        const getJobAdvertiseDetail = `SELECT * FROM freela13_freelancebangla.advertised_jobs where id = '${id}'`;
+        connection.query(getJobAdvertiseDetail, function (error, result) {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result[0]);
+            }
+        })
+    })
+}
+
 

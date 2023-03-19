@@ -6,7 +6,7 @@ import './App.css';
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
+      <div className="App" style={{ backgroundColor: 'lightblue' }}>
         <Main />
       </div>
     </BrowserRouter>
