@@ -10,9 +10,10 @@ export const loadAllJobAdvertise = (token) => {
 }
 
 export const confirmApplication = (token, data) => {
-    return axios.post(`${API}/user/worker/job/application`, data, {
+    return axios.post(`${API}/user/worker/job/application/confirm`, data, {
         headers: {
-            'Authorization': `${token}` //it will go to authorize middle ware check and destructed to user from token which will later be used to check whether the user is admin or not.
+            'Authorization': `${token}`, //it will go to authorize middle ware check and destructed to user from token which will later be used to check whether the user is admin or not.
+            'Content-Type': 'application/json'
         }
     });
 }

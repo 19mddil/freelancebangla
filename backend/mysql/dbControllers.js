@@ -130,4 +130,17 @@ module.exports.dbGetJobAdvertiseDetail = (connection, id) => {
     })
 }
 
+module.exports.dbPostJobApplication = (connecion, { job_id, applicant_id }) => {
+    return new Promise((resolve, reject) => {
+        const createJobApplicationSql = `INSERT INTO freela13_freelancebangla.applications (job_id, applicant_id) VALUES ('${job_id}', '${applicant_id}')`;
+        connecion.query(createJobApplicationSql, function (error, result) {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        })
+    })
+}
+
 

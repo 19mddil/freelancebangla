@@ -1,4 +1,4 @@
-const { dbConnect, dbCreateUser, dbCreateJobAdvertise, dbFindAllAdvertiseJobs, dbGetJobAdvertiseDetail } = require('../mysql/dbControllers');
+const { dbConnect, dbCreateUser, dbCreateJobAdvertise, dbFindAllAdvertiseJobs, dbGetJobAdvertiseDetail, dbPostJobApplication } = require('../mysql/dbControllers');
 
 const formidable = require('formidable');
 
@@ -56,6 +56,21 @@ module.exports.GetJobAdvertiseDetail = async (req, res) => {
     }
     try {
         const result = await dbGetJobAdvertiseDetail(connection, jobId);
+        return res.status(200).send(result);
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+}
+
+module.exports.PostJobApplication = async (req, res) => {
+    let connection = null;
+    try {
+        connection = await dbConnect('localhost');
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+    try {
+        const result = await dbPostJobApplication(connection, req.body);
         return res.status(200).send(result);
     } catch (err) {
         return res.status(500).send(err.message);
