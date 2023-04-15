@@ -39,6 +39,13 @@ const Application = () => {
                 setLoading(false);
                 toggle();
             })
+            .catch(err => {
+                console.log("here");
+                setSuccess(false);
+                setLoading(false);
+                setError(err.message);
+                toggle();
+            })
     }
 
     return (
@@ -46,7 +53,7 @@ const Application = () => {
             <Layout title="Apply Job" className="container">
                 <div style={{ width: '100%' }}>
                     {showLoading(loading)}
-                    {showError(error, error)}
+                    {showError(error, "You have already applied for this job")}
                     {showSuccess(success, "You have applied for the job")}
                 </div>
                 <ApplicationModal job={job} toggle={toggle} modal={modal} handleClick={handleClick} />

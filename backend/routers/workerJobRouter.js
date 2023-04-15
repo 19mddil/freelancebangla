@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { FindAllJobAdvertise, GetJobAdvertiseDetail, PostJobApplication } = require('../controllers/jobController');
+const { FindAllJobAdvertise, GetJobAdvertiseDetail, PostJobApplication, GetAllJobApplications } = require('../controllers/jobController');
 const worker = require('../middlewares/worker');
 const authorize = require('../middlewares/authorize');
 
@@ -11,5 +11,8 @@ router.route('/advertisement/:id')
 
 router.route('/application/confirm')
     .post([authorize, worker], PostJobApplication);
+
+router.route('/application/all/:applicant_id')
+    .get([authorize, worker], GetAllJobApplications);
 
 module.exports = router;    

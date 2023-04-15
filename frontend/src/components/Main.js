@@ -5,10 +5,13 @@ import Login from './user/Login';
 import Register from './user/Register';
 import { isAuthenticated } from '../utils/auth';
 import WorkerDeals from './user/worker/Deals';
+import WorkerApplications from './user/worker/WorkerApplications';
 import ClientDeals from './user/client/Deals';
 import Dashboard from './user/Dashboard';
 import JobAdvertise from './user/client/JobAdvertise';
 import LoadAdvertisedJobs from './user/client/LoadAdvertisedJobs';
+import LoadJobApplicantsByJobId from './user/client/LoadJobApplicantsByJobId';
+
 import Application from './user/worker/Application';
 
 class Main extends Component {
@@ -45,6 +48,18 @@ class Main extends Component {
                     element={
                         this.state.auth || isAuthenticated() ? (
                             <WorkerDeals />
+                        ) : (
+                            <Navigate
+                                to="/login"
+                            />
+                        )
+                    }
+                />
+                <Route
+                    path='/worker/applications'
+                    element={
+                        this.state.auth || isAuthenticated() ? (
+                            <WorkerApplications />
                         ) : (
                             <Navigate
                                 to="/login"
@@ -93,6 +108,18 @@ class Main extends Component {
                     element={
                         this.state.auth || isAuthenticated() ? (
                             <Application />
+                        ) : (
+                            <Navigate
+                                to="/login"
+                            />
+                        )
+                    }
+                />
+                <Route
+                    path='/client/jobs/application/:job_id'
+                    element={
+                        this.state.auth || isAuthenticated() ? (
+                            <LoadJobApplicantsByJobId />
                         ) : (
                             <Navigate
                                 to="/login"

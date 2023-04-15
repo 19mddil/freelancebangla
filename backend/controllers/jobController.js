@@ -1,4 +1,15 @@
-const { dbConnect, dbCreateUser, dbCreateJobAdvertise, dbFindAllAdvertiseJobs, dbGetJobAdvertiseDetail, dbPostJobApplication } = require('../mysql/dbControllers');
+const {
+    dbConnect,
+    dbCreateUser,
+    dbCreateJobAdvertise,
+    dbFindAllAdvertiseJobs,
+    dbFindAllAdvertiseJobsByClientId,
+    dbGetJobAdvertiseDetail,
+    dbPostJobApplication,
+    dbGetJobApplicantsByJobId,
+    dbGetAllJobApplicationsByApplicantId,
+    dbPostSelectedJobApplicationByApplicationId
+} = require('../mysql/dbControllers');
 
 const formidable = require('formidable');
 
@@ -29,6 +40,22 @@ module.exports.DeleteJobAdvertise = async (req, res) => {
 
 module.exports.UpdateJobAdvertise = () => {
 
+}
+
+module.exports.FindAllJobAdvertiseByClientId = async (req, res) => {
+    let connection = null;
+    const client_id = req.params.client_id;
+    try {
+        connection = await dbConnect('localhost');
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+    try {
+        const result = await dbFindAllAdvertiseJobsByClientId(connection, client_id);
+        return res.status(200).send(result);
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
 }
 
 module.exports.FindAllJobAdvertise = async (req, res) => {
@@ -71,6 +98,55 @@ module.exports.PostJobApplication = async (req, res) => {
     }
     try {
         const result = await dbPostJobApplication(connection, req.body);
+        return res.status(200).send(result);
+    } catch (err) {
+        return res.status(500).send(err);
+    }
+}
+
+module.exports.FindAllJobApplicantsByJobId = async (req, res) => {
+    let connection = null;
+    let jobId = req.params.job_id;
+    let clientId = req.params.client_id;
+    try {
+        connection = await dbConnect('localhost');
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+    try {
+        const result = await dbGetJobApplicantsByJobId(connection, jobId, clientId);
+        return res.status(200).send(result);
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+}
+
+module.exports.GetAllJobApplications = async (req, res) => {
+    let connection = null;
+    let applciantId = req.params.applicant_id;
+    try {
+        connection = await dbConnect('localhost');
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+    try {
+        const result = await dbGetAllJobApplicationsByApplicantId(connection, applciantId);
+        return res.status(200).send(result);
+    } catch (err) {
+        return res.status(500).send(err.message);
+
+    }
+}
+
+module.exports.SelectJobApplicationByApplicationId = async (req, res) => {
+    let connection = null;
+    try {
+        connection = await dbConnect('localhost');
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+    try {
+        const result = await dbPostSelectedJobApplicationByApplicationId(connection, req.body);
         return res.status(200).send(result);
     } catch (err) {
         return res.status(500).send(err.message);

@@ -104,6 +104,19 @@ module.exports.dbCreateJobAdvertise = (connecion, { title, applicationEndingTime
 
 };
 
+module.exports.dbFindAllAdvertiseJobsByClientId = (connecion, id) => {
+    return new Promise((resolve, reject) => {
+        const findAllJobAdvertiseSql = `SELECT * FROM freela13_freelancebangla.advertised_jobs WHERE client_id = '${id}'`;
+        connecion.query(findAllJobAdvertiseSql, function (error, result, fields) {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result)
+            }
+        })
+    })
+}
+
 module.exports.dbFindAllAdvertiseJobs = (connecion) => {
     return new Promise((resolve, reject) => {
         const findAllJobAdvertiseSql = `SELECT * FROM freela13_freelancebangla.advertised_jobs`;
@@ -138,6 +151,79 @@ module.exports.dbPostJobApplication = (connecion, { job_id, applicant_id }) => {
                 reject(error);
             } else {
                 resolve(result);
+            }
+        })
+    })
+}
+
+module.exports.dbGetJobApplicantsByJobId = (connection, jobId, client_id) => {
+    return new Promise((resolve, reject) => {
+        console.log(jobId);
+        const getJobApplicantsByJobIdSql =
+            `
+                select application_id,email,submission_time,applicant_id from 
+                freela13_freelancebangla.users join 
+                (
+                    (
+                        select freela13_freelancebangla.applications.id as application_id,applicant_id 
+                        from freela13_freelancebangla.advertised_jobs join freela13_freelancebangla.applications 
+                        on freela13_freelancebangla.advertised_jobs.id = freela13_freelancebangla.applications.job_id
+                        where freela13_freelancebangla.applications.job_id = '${jobId}'
+                        and freela13_freelancebangla.advertised_jobs.client_id = '${client_id}'
+                    )as T
+                )  
+                on freela13_freelancebangla.users.id = T.applicant_id
+            `;
+        connection.query(getJobApplicantsByJobIdSql, function (error, result) {
+            if (error) {
+                reject(error);
+            }
+            else if (result.length < 1) {
+                reject(new Error("no applicant was found"));
+            }
+            else {
+                resolve(result);
+            }
+        })
+    })
+}
+
+module.exports.dbGetAllJobApplicationsByApplicantId = (connection, applicantId) => {
+    return new Promise((resolve, reject) => {
+        const getAllJobApplicationsByApplicantIdSql =
+            `
+                select client_id,title,required_skills,starting_date,application_start_time,application_ending_date 
+                from freela13_freelancebangla.advertised_jobs 
+                join freela13_freelancebangla.applications 
+                on freela13_freelancebangla.advertised_jobs.id = freela13_freelancebangla.applications.job_id 
+                where freela13_freelancebangla.applications.applicant_id = '${applicantId}';
+            `;
+        connection.query(getAllJobApplicationsByApplicantIdSql, function (error, result) {
+            if (error) {
+                reject(error);
+            }
+            else if (result.length < 1) {
+                reject(new Error("no data was found"));
+            }
+            else {
+                resolve(result)
+            }
+        })
+    })
+}
+
+module.exports.dbPostSelectedJobApplicationByApplicationId = (connection, { selected_application_id }) => {
+    return new Promise((resolve, reject) => {
+        const PostSelectedJobApplicationByApplicationIdSql =
+            `
+             INSERT INTO freela13_freelancebangla.deals (selected_application_id) VALUES ('${selected_application_id}');   
+            `;
+        connection.query(PostSelectedJobApplicationByApplicationIdSql, function (error, result) {
+            if (error) {
+                reject(error);
+            }
+            else {
+                resolve(result)
             }
         })
     })

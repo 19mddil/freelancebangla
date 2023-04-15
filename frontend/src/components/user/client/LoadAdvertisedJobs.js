@@ -1,16 +1,17 @@
 import React from "react";
 import { Component } from "react";
-import { loadAllJobAdvertise } from "../../../api/apiClient";
+import { loadAllJobAdvertiseforClientId } from "../../../api/apiClient";
 import { userInfo } from "../../../utils/auth";
 import Layout from "../../Layout";
+import Card from "./Card";
 
 class LoadAdvertisedJobs extends Component {
     state = {
         jobs: null
     }
     componentDidMount() {
-        const { token } = userInfo();
-        loadAllJobAdvertise(token)
+        const { id, token } = userInfo();
+        loadAllJobAdvertiseforClientId(token, id)
             .then(res => {
                 console.log(res.data);
                 this.setState({
@@ -26,8 +27,9 @@ class LoadAdvertisedJobs extends Component {
         return (
             <div>
                 <Layout title="clients advertised jobs" className="container">
-                    <h1>View Applictions</h1>
-                    {JSON.stringify(this.state.jobs, null, 4)}
+                    <div className="card-group">
+                        {this.state.jobs && this.state.jobs.map(job => <Card job={job} key={job.id} />)}
+                    </div>
                 </Layout>
             </div>
         )

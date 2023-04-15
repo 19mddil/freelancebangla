@@ -9,6 +9,14 @@ export const loadAllJobAdvertise = (token) => {
     })
 }
 
+export const loadAllAppliedJobs = (token, applicant_id) => {
+    return axios.get(`${API}/user/worker/job/application/all/${applicant_id}`, {
+        headers: {
+            'Authorization': `${token}`
+        }
+    })
+}
+
 export const confirmApplication = (token, data) => {
     return axios.post(`${API}/user/worker/job/application/confirm`, data, {
         headers: {
