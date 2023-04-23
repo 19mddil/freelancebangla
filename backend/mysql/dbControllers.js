@@ -162,11 +162,11 @@ module.exports.dbGetJobApplicantsByJobId = (connection, jobId, client_id) => {
         console.log(jobId);
         const getJobApplicantsByJobIdSql =
             `
-                select application_id,email,submission_time,applicant_id,selected from 
+                select application_id,email,submission_time,applicant_id,selected,rejected from 
                 freela13_freelancebangla.users join 
                 (
                     (
-                        select freela13_freelancebangla.applications.id as application_id,applicant_id ,selected
+                        select freela13_freelancebangla.applications.id as application_id,applicant_id ,selected,rejected
                         from freela13_freelancebangla.advertised_jobs join freela13_freelancebangla.applications 
                         on freela13_freelancebangla.advertised_jobs.id = freela13_freelancebangla.applications.job_id
                         where freela13_freelancebangla.applications.job_id = '${jobId}'
@@ -218,7 +218,7 @@ module.exports.dbPostSelectedJobApplicationByApplicationId = (connection, { sele
         const PostSelectedJobApplicationByApplicationIdSql =
             `
              INSERT INTO freela13_freelancebangla.deals (selected_application_id) VALUES ('${selected_application_id}');
-             UPDATE freela13_freelancebangla.applications SET selected = 'true' WHERE (id = '${selected_application_id}');  
+             UPDATE freela13_freelancebangla.applications SET selected = 'true', rejected = 'false' WHERE (id = '${selected_application_id}');  
             `;
         connection.query(PostSelectedJobApplicationByApplicationIdSql, function (error, results) {
             if (error) {
@@ -231,22 +231,26 @@ module.exports.dbPostSelectedJobApplicationByApplicationId = (connection, { sele
         })
     })
 }
+module.exports.dbUpdateRejectedJobApplicationByApplicationId = (connection, { rejected_application_id }) => {
+    return new Promise((resolve, reject) => {
+        console.log(rejected_application_id);
+        const UpdateRejectedJobApplicationByApplicationIdSql =
+            `
+             UPDATE freela13_freelancebangla.applications SET selected = 'false', rejected = 'true' WHERE (id = '${rejected_application_id}');
+             delete from freela13_freelancebangla.deals where freela13_freelancebangla.deals.selected_application_id = '${rejected_application_id}'; 
+            `;
+        connection.query(UpdateRejectedJobApplicationByApplicationIdSql, function (error, results) {
+            if (error) {
+                console.log(error);
+                reject(error);
+            }
+            else {
+                resolve(results)
+            }
+        })
+    })
+}
 
-// module.exports.dbUpdateSelectedJobApplicationStatusByApplicantionId = (connection, { selected_application_id }) => {
-//     return new Promise((resolve, reject) => {
-// const UpdateSelectedJobApplicationStatusByApplicantionId =
-        //     `
-        //     UPDATE freela13_freelancebangla.applications SET selected = 'true' WHERE (id = '${selected_application_id}')
-        //     `
-//         connection.query(UpdateSelectedJobApplicationStatusByApplicantionId, function (error, result) {
-//             if (error) {
-//                 reject(error);
-//             }
-//             else {
-//                 resolve(result);
-//             }
-//         })
-//     })
-// }
+
 
 

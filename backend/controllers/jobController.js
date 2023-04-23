@@ -9,7 +9,7 @@ const {
     dbGetJobApplicantsByJobId,
     dbGetAllJobApplicationsByApplicantId,
     dbPostSelectedJobApplicationByApplicationId,
-    dbUpdateSelectedJobApplicationStatusByApplicantionId
+    dbUpdateRejectedJobApplicationByApplicationId
 } = require('../mysql/dbControllers');
 
 const formidable = require('formidable');
@@ -149,6 +149,23 @@ module.exports.SelectJobApplicationByApplicationId = async (req, res) => {
     try {
 
         const result = await dbPostSelectedJobApplicationByApplicationId(connection, req.body);
+        return res.status(200).send(result);
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+
+}
+
+module.exports.RejectJobApplicationByApplicationId = async (req, res) => {
+    let connection = null;
+    try {
+        connection = await dbConnect('localhost');
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+    try {
+
+        const result = await dbUpdateRejectedJobApplicationByApplicationId(connection, req.body);
         return res.status(200).send(result);
     } catch (err) {
         return res.status(500).send(err.message);
