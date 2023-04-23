@@ -8,7 +8,8 @@ const {
     dbPostJobApplication,
     dbGetJobApplicantsByJobId,
     dbGetAllJobApplicationsByApplicantId,
-    dbPostSelectedJobApplicationByApplicationId
+    dbPostSelectedJobApplicationByApplicationId,
+    dbUpdateSelectedJobApplicationStatusByApplicantionId
 } = require('../mysql/dbControllers');
 
 const formidable = require('formidable');
@@ -146,9 +147,11 @@ module.exports.SelectJobApplicationByApplicationId = async (req, res) => {
         return res.status(500).send(err.message);
     }
     try {
+
         const result = await dbPostSelectedJobApplicationByApplicationId(connection, req.body);
         return res.status(200).send(result);
     } catch (err) {
         return res.status(500).send(err.message);
     }
+
 }

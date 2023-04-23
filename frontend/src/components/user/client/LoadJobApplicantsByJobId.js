@@ -13,7 +13,6 @@ const LoadJobApplicantsByJobId = () => {
     const [tkn, setTkn] = useState('');
     const [workerId, setWorkerId] = useState('');
     const [resData, setResData] = useState(null);
-    const [selected, setSelected] = useState(false);
     const [rejected, setRejected] = useState(false);
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -27,24 +26,29 @@ const LoadJobApplicantsByJobId = () => {
         setTkn(token);
         loadJobApplicantsByJobId(token, job_id, id)
             .then(res => {
+                console.log(res.data);
                 setResData(res.data);
             })
             .catch(err => { })
     }, []);
 
-    const handleSelect = (applicationId) => {
-        console.log("here");
-        selectWorkersApplication(tkn, {
-            selected_application_id: applicationId,
-        })
-            .then(res => {
-                setSelected(true);
-                setSuccess(true);
+    const handleSelect = async (applicationId) => {
 
+        const { token, id } = userInfo();
+        setLoading(true);
+        try {
+            await selectWorkersApplication(tkn, {
+                selected_application_id: applicationId,
             })
-            .catch(err => {
-                setSelected(false);
-            })
+            const res = await loadJobApplicantsByJobId(token, job_id, id);
+            setResData(res.data);
+            setLoading(false);
+            setSuccess(true);
+        } catch (err) {
+            setError("Couldn't do that");
+        }
+
+
     }
 
 
@@ -66,7 +70,9 @@ const LoadJobApplicantsByJobId = () => {
                     (<ListGroupItem>
                         <Link>{data.email}</Link>
                         <Button color="danger" size="sm" style={{ margin: "1%", float: "right" }} onClick={() => handleReject()}>Reject</Button>
-                        <Button onClick={() => handleSelect(data.application_id)} disabled={selected} color="success" size="sm" style={{ margin: "1%", float: "right" }} > {selected === true ? 'Selected' : 'Select'}</Button>
+                        <Button onClick={() => handleSelect(data.application_id)} disabled={data.selected === 'false' ? false : true} color="success" size="sm" style={{ margin: "1%", float: "right" }} >
+                            {data.selected === true ? 'Selected' : 'Select'}
+                        </Button>
                     </ListGroupItem>)
                     )}
                 </ListGroup>

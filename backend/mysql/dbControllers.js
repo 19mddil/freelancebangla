@@ -26,7 +26,8 @@ module.exports.dbConnect = (dbhost) => {
         host: dbhost,
         user: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
+        database: process.env.DB_NAME,
+        multipleStatements: true
     });
 
     return new Promise((resolve, reject) => {
@@ -161,11 +162,11 @@ module.exports.dbGetJobApplicantsByJobId = (connection, jobId, client_id) => {
         console.log(jobId);
         const getJobApplicantsByJobIdSql =
             `
-                select application_id,email,submission_time,applicant_id from 
+                select application_id,email,submission_time,applicant_id,selected from 
                 freela13_freelancebangla.users join 
                 (
                     (
-                        select freela13_freelancebangla.applications.id as application_id,applicant_id 
+                        select freela13_freelancebangla.applications.id as application_id,applicant_id ,selected
                         from freela13_freelancebangla.advertised_jobs join freela13_freelancebangla.applications 
                         on freela13_freelancebangla.advertised_jobs.id = freela13_freelancebangla.applications.job_id
                         where freela13_freelancebangla.applications.job_id = '${jobId}'
@@ -216,17 +217,36 @@ module.exports.dbPostSelectedJobApplicationByApplicationId = (connection, { sele
     return new Promise((resolve, reject) => {
         const PostSelectedJobApplicationByApplicationIdSql =
             `
-             INSERT INTO freela13_freelancebangla.deals (selected_application_id) VALUES ('${selected_application_id}');   
+             INSERT INTO freela13_freelancebangla.deals (selected_application_id) VALUES ('${selected_application_id}');
+             UPDATE freela13_freelancebangla.applications SET selected = 'true' WHERE (id = '${selected_application_id}');  
             `;
-        connection.query(PostSelectedJobApplicationByApplicationIdSql, function (error, result) {
+        connection.query(PostSelectedJobApplicationByApplicationIdSql, function (error, results) {
             if (error) {
+                console.log(error);
                 reject(error);
             }
             else {
-                resolve(result)
+                resolve(results)
             }
         })
     })
 }
+
+// module.exports.dbUpdateSelectedJobApplicationStatusByApplicantionId = (connection, { selected_application_id }) => {
+//     return new Promise((resolve, reject) => {
+// const UpdateSelectedJobApplicationStatusByApplicantionId =
+        //     `
+        //     UPDATE freela13_freelancebangla.applications SET selected = 'true' WHERE (id = '${selected_application_id}')
+        //     `
+//         connection.query(UpdateSelectedJobApplicationStatusByApplicantionId, function (error, result) {
+//             if (error) {
+//                 reject(error);
+//             }
+//             else {
+//                 resolve(result);
+//             }
+//         })
+//     })
+// }
 
 
