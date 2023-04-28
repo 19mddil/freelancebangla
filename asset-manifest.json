@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/freelancebangla/static/css/main.e08d4489.css",
+    "main.js": "/freelancebangla/static/js/main.98f568a1.js",
+    "static/js/787.90dc8d95.chunk.js": "/freelancebangla/static/js/787.90dc8d95.chunk.js",
+    "index.html": "/freelancebangla/index.html",
+    "main.e08d4489.css.map": "/freelancebangla/static/css/main.e08d4489.css.map",
+    "main.98f568a1.js.map": "/freelancebangla/static/js/main.98f568a1.js.map",
+    "787.90dc8d95.chunk.js.map": "/freelancebangla/static/js/787.90dc8d95.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e08d4489.css",
+    "static/js/main.98f568a1.js"
+  ]
+}
