@@ -18,7 +18,7 @@ class Navigation extends Component {
     render() {
         return (
             <Navbar dark color='success' expand="sm">
-                <NavbarBrand href='/' style={{ border: '2px solid green', padding: '5px', color: 'white', textEmphasis: 'black' }} >  FBL  </NavbarBrand>
+                <NavbarBrand href='https://19mddil.github.io/freelancebangla' style={{ border: '2px solid green', padding: '5px', color: 'white', textEmphasis: 'black' }} >  FBL  </NavbarBrand>
                 <NavbarToggler onClick={this.navToggler} />
                 <Collapse isOpen={this.state.isNavOpen} navbar>
                     <Nav className='mr-auto' navbar>
