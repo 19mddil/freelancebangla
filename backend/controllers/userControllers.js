@@ -1,5 +1,7 @@
 const { dbConnect, dbCreateUser, genJWT, dbFindUserByEmail, dbFindUserByEmailByRole } = require('../mysql/dbControllers');
 const bcrypt = require('bcrypt');
+const sendMail = require('../utils/sendEmail');
+const crypto = require('crypto');
 
 
 
@@ -23,14 +25,19 @@ module.exports.SignUp = async (req, res) => {
         }
         const salt = await bcrypt.genSalt(10);
         req.body.password = await bcrypt.hash(req.body.password, salt);
+        req.body.token = crypto.randomBytes(32).toString("hex");
+
+
         const result = await dbCreateUser(connection, req.body);
         const _user = {
             ...req.body,
             id: result.insertId
         }
         let _token = await genJWT(_user);
+        const url = `${process.env.LOCAL_BASE_URL}/${_user.id}/verify/${_user.token}`;
+        await sendMail(_user.email, "Verify Email", url);
         connection.destroy();
-        return res.status(201).send({ messeage: "Registration Successful", user: _user, token: _token });
+        return res.status(201).send({ messeage: "An Email sent to your account ", user: _user, token: _token });
     } catch (err) {
         connection.destroy();
         return res.status(500).send(err.message);

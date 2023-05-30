@@ -9,7 +9,7 @@ module.exports.genJWT = function ({ id, email, password, role, submission_time }
             email: email,
             password: password,
             role: role,
-            submission_time: submission_time
+            submission_time: submission_time,
         }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" });
         if (token) {
             resolve(token);
