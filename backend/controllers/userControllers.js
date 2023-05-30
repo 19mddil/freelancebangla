@@ -34,6 +34,7 @@ module.exports.SignUp = async (req, res) => {
             id: result.insertId
         }
         let _token = await genJWT(_user);
+
         const url = `${process.env.LOCAL_BASE_URL}/${_user.id}/verify/${_user.token}`;
         await sendMail(_user.email, "Verify Email", url);
         connection.destroy();

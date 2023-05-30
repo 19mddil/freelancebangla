@@ -10,6 +10,6 @@ module.exports = (req, res, next) => {
         next();
     } catch (e) {
         console.log(e.message);
-        res.status(400).send("Not valid token");
+        res.status(400).send("Not valid token"); //
     }
 }

@@ -13,7 +13,7 @@ module.exports = async (email, subject, text) => {
         });
 
         await transporter.sendMail({
-            from: 'mddilshadul98@freelancebangla.com',
+            from: 'mddilshadul98@freelancebangla.com', //server user
             to: email,
             subject: subject,
             text: text
